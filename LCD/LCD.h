@@ -28,12 +28,15 @@ sbit LCD_REST   =P0^1;	  //复位
 //sbit LCD_SCK    =P1^7;	  //时钟
 //sbit LCD_REST   =P0^1;	  //复位
 
-#define LCD_CS P1IN      //片选
-sbit LCD_DC     =P0^2;	  //数据/命令切换
-sbit LCD_SDI    =P1^5;	  //数据
-sbit LCD_SCK    =P1^7;	  //时钟
-sbit LCD_REST   =P0^1;	  //复位
-#define R_LED_L P3OUT &= ~BIT6
+#define LCD_CS   P1OUT |= BIT0      //片选 P1.0
+#define LCD_DC   P1OUT |= BIT1	  	//数据/命令切换
+#define LCD_SDI  P1OUT |= BIT2	  	//数据
+#define LCD_SCK  P1OUT |= BIT3	  	//时钟
+#define LCD_REST P1OUT |= BIT4	  	//复位
+//#define LED_IN P2DIR &= ~BIT1   //定义p2.1为输入引脚
+//#define LED_OUT P2DIR |= BIT1  //定义p2.1为输出引脚
+//#define LED_ON P3OUT|=BIT6;
+//#define LED_OFF P3OUT&=~BIT6;
 
 extern  u16 BACK_COLOR, POINT_COLOR;   //背景色，画笔色
 
