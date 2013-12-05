@@ -28,13 +28,13 @@ void LCD_Writ_Bus(char da)   //串行数据写入
 	LCD_SDI=bit0;LCD_SCK_L;LCD_SCK_H;*/
 	unsigned int i;
 	unsigned char temp=0x80;
-	for(i=7;i>=0;i--)
+	for(i=8;i>0;i--)
 	{
 		if(da & temp) LCD_SDI_H;
 		else	LCD_SDI_L;
 		LCD_SCK_L;
 		LCD_SCK_H;
-		temp>>1;
+		temp>>=1;
 	}
 }
 void LCD_WR_DATA8(char da) //发送数据-8位参数
