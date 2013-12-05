@@ -1,9 +1,9 @@
 #include "msp430f5529.h"
-#include <font\font.h>
-#include <sys\sys.h>
-#include <lcd\lcd.h>
+#include "lcd.h"
+#include "font.h"
+#include "sys.h"
 
-unsigned char bdata bitdata;
+/*unsigned char bdata bitdata;
 sbit bit7=bitdata^7;
 sbit bit6=bitdata^6;
 sbit bit5=bitdata^5;
@@ -12,34 +12,45 @@ sbit bit3=bitdata^3;
 sbit bit2=bitdata^2;
 sbit bit1=bitdata^1;
 sbit bit0=bitdata^0;
+*/
 
 u16 BACK_COLOR, POINT_COLOR;   //背景色，画笔色
 void LCD_Writ_Bus(char da)   //串行数据写入
 {
-	bitdata=da;
-	LCD_SDI=bit7;LCD_SCK=0;LCD_SCK=1;
-	LCD_SDI=bit6;LCD_SCK=0;LCD_SCK=1;
-	LCD_SDI=bit5;LCD_SCK=0;LCD_SCK=1;
-	LCD_SDI=bit4;LCD_SCK=0;LCD_SCK=1;
-	LCD_SDI=bit3;LCD_SCK=0;LCD_SCK=1;
-	LCD_SDI=bit2;LCD_SCK=0;LCD_SCK=1;
-	LCD_SDI=bit1;LCD_SCK=0;LCD_SCK=1;
-	LCD_SDI=bit0;LCD_SCK=0;LCD_SCK=1;
+	/*bitdata=da;
+	LCD_SDI=bit7;LCD_SCK_L;LCD_SCK_H;
+	LCD_SDI=bit6;LCD_SCK_L;LCD_SCK_H;
+	LCD_SDI=bit5;LCD_SCK_L;LCD_SCK_H;
+	LCD_SDI=bit4;LCD_SCK_L;LCD_SCK_H;
+	LCD_SDI=bit3;LCD_SCK_L;LCD_SCK_H;
+	LCD_SDI=bit2;LCD_SCK_L;LCD_SCK_H;
+	LCD_SDI=bit1;LCD_SCK_L;LCD_SCK_H;
+	LCD_SDI=bit0;LCD_SCK_L;LCD_SCK_H;*/
+	unsigned int i;
+	unsigned char temp=0x80;
+	for(i=7;i>=0;i--)
+	{
+		if(da & temp) LCD_SDI_H;
+		else	LCD_SDI_L;
+		LCD_SCK_L;
+		LCD_SCK_H;
+		temp>>1;
+	}
 }
 void LCD_WR_DATA8(char da) //发送数据-8位参数
 {
-    LCD_DC=1;
+    LCD_DC_H;
 	LCD_Writ_Bus(da);
 }
  void LCD_WR_DATA(int da)
 {
-    LCD_DC=1;
+    LCD_DC_H;
 	LCD_Writ_Bus(da>>8);
 	LCD_Writ_Bus(da);
 }
 void LCD_WR_REG(char da)
 {
-    LCD_DC=0;
+    LCD_DC_L;
 	LCD_Writ_Bus(da);
 }
  void LCD_WR_REG_DATA(int reg,int da)
@@ -68,8 +79,8 @@ void Lcd_Init(void)
 {
 
 //调用一次这些函数，免得编译的时候提示警告
-   	LCD_CS =1;
-	if(LCD_CS==0)
+   	LCD_CS_H;
+	if(LCD_CS_L)
 	{
 	   LCD_WR_REG_DATA(0,0);
 	   LCD_ShowString(0,0," ");
@@ -80,14 +91,14 @@ void Lcd_Init(void)
 	   Draw_Circle(0,0,0);
  	 }
 
-    LCD_REST=1;
+    LCD_REST_H;
     delayms(5);
-	LCD_REST=0;
+	LCD_REST_L;
 	delayms(5);
-	LCD_REST=1;
-	LCD_CS=1;
+	LCD_REST_H;
+	LCD_CS_H;
 	delayms(5);
-	LCD_CS =0;  //打开片选使能
+	LCD_CS_L;  //打开片选使能
 
 		LCD_WR_REG(0xCB);
         LCD_WR_DATA8(0x39);
