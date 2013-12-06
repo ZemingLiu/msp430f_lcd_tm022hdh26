@@ -23,6 +23,7 @@ sbit LCD_REST   =P0^1;	  //复位
 
 #define LCD_CS_H   P1OUT |= 0x01      //片选 P1.0
 #define LCD_CS_L   P1OUT &= 0xFE
+#define	LCD_CS	   P1OUT &= 0x01
 #define LCD_DC_H   P1OUT |= 0x02	  	//数据/命令切换
 #define LCD_DC_L   P1OUT &= 0xFD
 #define LCD_SDI_H  P1OUT |= 0xF4	  	//数据

@@ -1,3 +1,12 @@
+/*
+ * main.c
+ *
+ *  已知问题：
+ *  1.CCS推荐使用减计数for循环，因此在下列文件中数显！提示
+ *
+ *      Author: 31lab
+ */
+
 #include "msp430f5529.h"
 #include "lcd.h"
 #include "font.h"
@@ -80,10 +89,11 @@ void Lcd_Init(void)
 
 //调用一次这些函数，免得编译的时候提示警告
    	LCD_CS_H;
-	if(LCD_CS_L)
+	if(LCD_CS==0)
 	{
 	   LCD_WR_REG_DATA(0,0);
-	   LCD_ShowString(0,0," ");
+	   LCD_ShowString(0,0,(const unsigned char *)" ");
+//	   LCD_ShowString(0,0,0);
 	   LCD_ShowNum(0,0,0,0);
 	   LCD_Show2Num(0,0,0,0);
 	   LCD_DrawPoint_big(0,0);
